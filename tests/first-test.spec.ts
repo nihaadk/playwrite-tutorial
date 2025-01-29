@@ -6,34 +6,48 @@ test.beforeEach(async ({ page }) => {
   await page.getByText("Form Layouts").click();
 });
 
-test('Locator syntax rules', async ({ page }) => {
+test("Locator syntax rules", async ({ page }) => {
+  // by tage name
+  page.locator("input");
 
-    // by tage name
-    page.locator('input');
+  // by tage name the first element and click
+  page.locator("input").first().click();
 
+  // by id
+  page.locator("#inputEmail1");
 
-    // by tage name the first element and click
-    page.locator('input').first().click();
+  // by class
+  page.locator(".shape-rectangle");
 
-    // by id
-    page.locator('#inputEmail1');
+  // by attribute
+  page.locator('[type="email"]');
 
-    // by class
-    page.locator('.shape-rectangle');
+  // by class value (full)
+  page.locator(
+    '[class="input-full-width size-medium status-basic shape-rectangle nb-transition"]'
+  );
 
-    // by attribute
-    page.locator('[type="email"]');
+  // combine different selectors
+  page.locator('input[type="email"][nbinput]');
 
-    // by class value (full)
-    page.locator('[class="input-full-width size-medium status-basic shape-rectangle nb-transition"]');
+  // by XPath (not recommended)
+  page.locator('//*[@id="inputEmail1"]');
 
-    // combine different selectors
-    page.locator('input[type="email"][nbinput]');
+  // by exact text match
+  page.locator(':text-is("Using the Grid")');
+});
 
-    // by XPath (not recommended)
-    page.locator('//*[@id="inputEmail1"]');
+test("Use facing locators", async ({ page }) => {
+  await page.getByRole("textbox", { name: "Email" }).first().click();
+  await page.getByRole("button", { name: "Sign in" }).first().click();
 
-    // by exact text match
-    page.locator(':text-is("Using the Grid")');
+  await page.getByLabel("Email").first().click();
 
+  await page.getByPlaceholder("Jane Doe").click();
+
+  await page.getByText("Using the Grid").click();
+
+  await page.getByTitle("IoT Dashboard").click();
+
+  await page.getByTestId("SignIn").click();
 });
