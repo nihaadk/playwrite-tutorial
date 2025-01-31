@@ -123,3 +123,26 @@ test("Reuse the locators", async ({ page }) => {
   await expect(emailControl).toHaveValue("test@test.com");
   await expect(passwordControl).toHaveValue("foofoofoo");
 });
+
+test("Extracting values", async ({ page }) => {
+  // signel text value
+  const basicForm = page.locator("nb-card").filter({ hasText: "Basic form" });
+  const buttonText = await basicForm.getByRole("button").textContent();
+  await expect(buttonText).toEqual("Submit");
+
+  // multiple text values
+  const allRadioButtonsLabels = await page
+    .locator("nb-radio")
+    .allTextContents();
+  await expect(allRadioButtonsLabels).toContain("Option 1");
+
+  // input value
+  const emailControl = basicForm.getByRole("textbox", { name: "Email" });
+  await emailControl.fill("test@test.com");
+  const emailValue = await emailControl.inputValue();
+  expect(emailValue).toEqual("test@test.com");
+
+  // get attribute value
+  const placeholderValue = await emailControl.getAttribute("placeholder");
+  await expect(placeholderValue).toEqual("Email");
+});
